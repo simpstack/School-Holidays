@@ -70,8 +70,8 @@ select option { background: var(--surface2); }
 /* PILLS */
 .pills { display: flex; flex-wrap: wrap; gap: 6px; }
 .pill {
-  background: var(--surface3); border: 1px solid var(--border); border-radius: 20px;
-  padding: 5px 12px; font-size: 13px; color: var(--text3); cursor: pointer;
+  background: var(--surface3); border: 1px solid var(--border2); border-radius: 20px;
+  padding: 5px 12px; font-size: 13px; color: var(--text2); cursor: pointer;
   font-family: inherit; transition: all 0.15s;
 }
 .pill:hover { background: rgba(41,151,255,0.15); border-color: var(--accent); color: var(--accent); }
@@ -400,7 +400,7 @@ function render(data, year) {
       const dateStr = ev.endDate && ev.endDate !== "null" && ev.endDate !== ev.startDate
         ? `${esc(ev.startDate)} – ${esc(ev.endDate)}` : esc(ev.startDate || "");
       const dur = ev.durationDays
-        ? `<span class="dur" style="background:#d1d1d6;color:#1d1d1f">${ev.durationDays}d</span>` : "<span></span>";
+        ? `<span class="dur" style="background:rgba(255,255,255,0.12);color:#a1a1a6">${ev.durationDays}d</span>` : "<span></span>";
       return `<div class="event-row">
         <div>
           <div class="event-name">${esc(ev.name)}</div>
