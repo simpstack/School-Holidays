@@ -1,0 +1,432 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>School Holidays UK</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500;600;700&family=DM+Serif+Display&display=swap" rel="stylesheet" />
+<style>
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+:root {
+  --bg: #0a0a0a; --surface: #161616; --surface2: #1e1e1e; --surface3: #252525;
+  --border: rgba(255,255,255,0.07); --border2: rgba(255,255,255,0.12);
+  --text: #f5f5f7; --text2: #a1a1a6; --text3: #6e6e73; --text4: #3a3a3a;
+  --accent: #2997ff; --red: #ff453a; --green: #30d158; --orange: #ff9f0a; --purple: #bf5af2;
+  --r: 14px; --r2: 10px;
+}
+html { scroll-behavior: smooth; }
+body { font-family: 'DM Sans', -apple-system, sans-serif; background: var(--bg); color: var(--text); min-height: 100vh; -webkit-font-smoothing: antialiased; }
+* { box-sizing: border-box; }
+
+/* NAV */
+nav {
+  position: sticky; top: 0; z-index: 100;
+  background: rgba(10,10,10,0.92); backdrop-filter: blur(24px);
+  border-bottom: 1px solid var(--border); height: 50px;
+  display: flex; align-items: center; justify-content: space-between; padding: 0 24px;
+}
+.nav-brand { display: flex; align-items: center; gap: 8px; font-weight: 600; font-size: 15px; color: var(--text); text-decoration: none; }
+.nav-sub { font-size: 12px; color: var(--text4); }
+
+/* LAYOUT */
+.wrap { max-width: 660px; margin: 0 auto; padding: 0 20px 80px; }
+
+/* HERO */
+.hero { text-align: center; padding: 56px 0 36px; animation: fadeUp 0.5s ease both; }
+.hero-eyebrow { font-size: 12px; font-weight: 600; letter-spacing: 0.08em; text-transform: uppercase; color: var(--accent); margin-bottom: 12px; }
+.hero h1 { font-family: 'DM Serif Display', serif; font-size: clamp(36px,7vw,56px); font-weight: 400; letter-spacing: -0.02em; color: var(--text); line-height: 1.05; margin-bottom: 12px; }
+.hero p { font-size: 16px; color: var(--text3); line-height: 1.6; font-weight: 300; }
+
+/* CARD */
+.card { background: var(--surface); border-radius: var(--r); box-shadow: 0 8px 40px rgba(0,0,0,0.5), 0 0 0 1px var(--border); padding: 22px; margin-bottom: 14px; }
+
+/* SEARCH ROW */
+.search-row { display: flex; gap: 8px; margin-bottom: 14px; flex-wrap: wrap; }
+.input-wrap { flex: 1; min-width: 160px; position: relative; }
+.input-wrap svg { position: absolute; left: 11px; top: 50%; transform: translateY(-50%); color: var(--text4); pointer-events: none; }
+input[type=text], select {
+  padding: 11px 12px; background: var(--surface2); border: 1.5px solid var(--border2);
+  border-radius: var(--r2); color: var(--text); font-size: 15px; font-family: inherit;
+  outline: none; transition: border-color 0.15s, box-shadow 0.15s; width: 100%;
+}
+input[type=text] { padding-left: 34px; }
+input[type=text]:focus, select:focus { border-color: var(--accent); box-shadow: 0 0 0 3px rgba(41,151,255,0.18); }
+input::placeholder { color: var(--text4); }
+select {
+  width: auto; cursor: pointer; appearance: none; padding-right: 28px;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='6' viewBox='0 0 10 6'%3E%3Cpath fill='%236e6e73' d='M5 6L0 0h10z'/%3E%3C/svg%3E");
+  background-repeat: no-repeat; background-position: right 9px center; background-color: var(--surface2);
+}
+select option { background: var(--surface2); }
+.btn {
+  padding: 11px 20px; background: var(--accent); color: #fff; border: none; border-radius: var(--r2);
+  font-size: 15px; font-weight: 600; cursor: pointer; font-family: inherit; white-space: nowrap;
+  transition: opacity 0.15s, background 0.15s;
+}
+.btn:hover { opacity: 0.88; }
+.btn:disabled { background: var(--surface3); color: var(--text4); cursor: not-allowed; opacity: 1; }
+
+/* PILLS */
+.pills { display: flex; flex-wrap: wrap; gap: 6px; }
+.pill {
+  background: var(--surface3); border: 1px solid var(--border); border-radius: 20px;
+  padding: 5px 12px; font-size: 13px; color: var(--text3); cursor: pointer;
+  font-family: inherit; transition: all 0.15s;
+}
+.pill:hover { background: rgba(41,151,255,0.15); border-color: var(--accent); color: var(--accent); }
+.pill:disabled { opacity: 0.4; cursor: not-allowed; }
+
+/* STATES */
+.loading { display: none; align-items: center; gap: 12px; padding: 22px 18px; margin-bottom: 14px; }
+.loading.show { display: flex; }
+.spinner { width: 18px; height: 18px; border: 2px solid var(--border2); border-top-color: var(--accent); border-radius: 50%; animation: spin 0.7s linear infinite; flex-shrink: 0; }
+.loading span { font-size: 14px; color: var(--text3); }
+.error-box { display: none; border-radius: var(--r); padding: 16px 18px; margin-bottom: 14px; background: rgba(255,69,58,0.1); border: 1px solid rgba(255,69,58,0.2); }
+.error-box.show { display: block; }
+.error-title { font-weight: 600; color: var(--red); font-size: 14px; margin-bottom: 4px; }
+.error-msg { font-size: 13px; color: #ff9a94; line-height: 1.5; }
+
+/* RESULTS */
+.results { display: none; }
+.results.show { display: block; animation: fadeUp 0.35s ease both; }
+.school-header { border-radius: var(--r); padding: 20px 18px; margin-bottom: 12px; display: flex; justify-content: space-between; align-items: flex-start; gap: 12px; flex-wrap: wrap; }
+.school-name { font-family: 'DM Serif Display', serif; font-size: 24px; font-weight: 400; color: var(--text); margin-bottom: 5px; line-height: 1.2; }
+.school-meta { font-size: 13px; color: var(--text3); }
+.year-badge { background: var(--accent); color: #fff; font-size: 13px; font-weight: 700; padding: 5px 13px; border-radius: 20px; white-space: nowrap; align-self: flex-start; }
+
+/* TERM GROUPS */
+.term-group { border-radius: var(--r); overflow: hidden; margin-bottom: 10px; box-shadow: 0 2px 16px rgba(0,0,0,0.4), 0 0 0 1px var(--border); }
+.term-header { display: flex; align-items: center; gap: 10px; padding: 14px 18px; cursor: pointer; user-select: none; border-bottom: 1px solid var(--border); transition: background 0.1s; }
+.term-header:hover { background: var(--surface2); }
+.term-dot { width: 9px; height: 9px; border-radius: 50%; flex-shrink: 0; }
+.term-name { flex: 1; font-size: 15px; font-weight: 600; color: var(--text); }
+.term-count { font-size: 12px; color: var(--text4); background: var(--surface3); padding: 2px 8px; border-radius: 8px; }
+.term-chevron { color: var(--text4); font-size: 11px; transition: transform 0.2s; }
+.term-group.closed .term-chevron { transform: rotate(-90deg); }
+.term-group.closed .term-body { display: none; }
+.term-group.closed .term-header { border-bottom: none; }
+
+.event-row { display: grid; grid-template-columns: 1fr auto auto; gap: 10px; align-items: center; padding: 12px 18px; border-bottom: 1px solid rgba(255,255,255,0.04); transition: background 0.1s; }
+.event-row:last-child { border-bottom: none; }
+.event-row:hover { background: var(--surface2); }
+.event-name { font-size: 15px; font-weight: 500; color: var(--text); }
+.event-dates { font-size: 13px; color: var(--text2); margin-top: 2px; }
+.dur { font-size: 11px; font-weight: 700; padding: 3px 9px; border-radius: 7px; white-space: nowrap; }
+.chip { font-size: 11px; font-weight: 600; letter-spacing: 0.04em; text-transform: uppercase; padding: 3px 8px; border-radius: 5px; white-space: nowrap; }
+.chip-holiday { background: rgba(41,151,255,0.18); color: #47a8ff; }
+.chip-bank    { background: rgba(255,159,10,0.18); color: var(--orange); }
+.chip-inset   { background: rgba(191,90,242,0.18); color: var(--purple); }
+.chip-term    { background: rgba(48,209,88,0.18);  color: var(--green); }
+
+/* DISCLAIMER */
+.disclaimer { border-radius: var(--r); padding: 14px 16px; margin-top: 10px; display: flex; gap: 8px; font-size: 13px; color: var(--text3); line-height: 1.5; box-shadow: 0 0 0 1px var(--border); }
+.disclaimer a { color: var(--accent); text-decoration: none; }
+
+@keyframes spin    { to { transform: rotate(360deg); } }
+@keyframes fadeUp  { from { opacity:0; transform:translateY(14px); } to { opacity:1; transform:none; } }
+
+@media (max-width: 520px) {
+  .search-row { flex-direction: column; }
+  select { width: 100%; }
+  .btn { width: 100%; text-align: center; }
+  .event-row { grid-template-columns: 1fr; gap: 6px; }
+}
+</style>
+</head>
+<body>
+
+<nav>
+  <a class="nav-brand" href="#">
+    <svg width="18" height="18" viewBox="0 0 20 20" fill="none">
+      <rect x="2" y="3" width="16" height="15" rx="3" stroke="#f5f5f7" stroke-width="1.5"/>
+      <path d="M2 7h16" stroke="#f5f5f7" stroke-width="1.5"/>
+      <path d="M7 1v4M13 1v4" stroke="#f5f5f7" stroke-width="1.5" stroke-linecap="round"/>
+      <rect x="5.5" y="10" width="3" height="3" rx="0.5" fill="#2997ff"/>
+    </svg>
+    School Holidays UK
+  </a>
+  <span class="nav-sub">Powered by Claude AI</span>
+</nav>
+
+<div class="wrap">
+
+  <div class="hero">
+    <p class="hero-eyebrow">United Kingdom</p>
+    <h1>School Holidays</h1>
+    <p>Term dates and holidays for any school or local authority in England, Wales or Scotland.</p>
+  </div>
+
+  <div class="card">
+    <div class="search-row">
+      <div class="input-wrap">
+        <svg width="14" height="14" viewBox="0 0 15 15" fill="none">
+          <circle cx="6.5" cy="6.5" r="5" stroke="currentColor" stroke-width="1.5"/>
+          <path d="M10.5 10.5l3 3" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+        </svg>
+        <input type="text" id="school-input" placeholder="School or local authority…" autocomplete="off" />
+      </div>
+      <select id="year-select">
+        <option value="2023-2024">2023–24</option>
+        <option value="2024-2025">2024–25</option>
+        <option value="2025-2026">2025–26</option>
+        <option value="2026-2027">2026–27</option>
+        <option value="2027-2028">2027–28</option>
+      </select>
+      <button class="btn" id="search-btn" onclick="doSearch()">Search</button>
+    </div>
+    <div class="pills" id="pills"></div>
+  </div>
+
+  <div class="card loading" id="loading">
+    <div class="spinner"></div>
+    <span>Looking up holiday dates…</span>
+  </div>
+
+  <div class="error-box" id="error-box">
+    <div class="error-title">Error</div>
+    <div class="error-msg" id="error-msg"></div>
+  </div>
+
+  <div class="results" id="results">
+    <div class="card school-header" id="school-header"></div>
+    <div id="terms-container"></div>
+    <div class="card disclaimer" id="disclaimer">
+      <span>ℹ️</span>
+      <span id="disclaimer-text">Always verify dates with your school or <a href="https://www.gov.uk/school-term-holiday-dates" target="_blank">GOV.UK</a>.</span>
+    </div>
+  </div>
+
+</div>
+
+<script>
+// ── CONFIG ───────────────────────────────────────────────────────────────────
+const API_KEY = "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";
+
+// ── SET CURRENT SCHOOL YEAR ───────────────────────────────────────────────────
+// UK school year runs Sep–Aug, so if month >= 9 (September) we're in new year
+(function() {
+  const now = new Date();
+  const year = now.getFullYear();
+  const month = now.getMonth() + 1; // 1-based
+  const schoolYear = month >= 9 ? `${year}-${year + 1}` : `${year - 1}-${year}`;
+  const sel = document.getElementById("year-select");
+  for (let opt of sel.options) {
+    if (opt.value === schoolYear) { opt.selected = true; break; }
+  }
+})();
+
+// ── QUICK PILLS ──────────────────────────────────────────────────────────────
+const QUICK = ["Wokingham","Reading","Bracknell Forest","West Berkshire","Hampshire","Surrey","Oxfordshire","Kent"];
+document.getElementById("pills").innerHTML = QUICK.map(q =>
+  `<button class="pill" onclick="quickSearch('${q}')">${q}</button>`
+).join("");
+
+document.getElementById("school-input").addEventListener("keydown", e => {
+  if (e.key === "Enter") doSearch();
+});
+
+function quickSearch(name) {
+  document.getElementById("school-input").value = name;
+  doSearch();
+}
+
+// ── COLOURS ──────────────────────────────────────────────────────────────────
+function termColor(name) {
+  const n = (name || "").toLowerCase();
+  if (n.includes("christmas") || n.includes("autumn")) return "#ff453a";
+  if (n.includes("easter")    || n.includes("spring")) return "#30d158";
+  if (n.includes("summer"))  return "#2997ff";
+  if (n.includes("half"))    return "#bf5af2";
+  if (n.includes("bank"))    return "#ff9f0a";
+  if (n.includes("inset"))   return "#636366";
+  return "#2997ff";
+}
+
+function typeChip(type) {
+  const t = (type || "").toLowerCase();
+  if (t.includes("bank"))                        return `<span class="chip chip-bank">Bank</span>`;
+  if (t.includes("inset"))                       return `<span class="chip chip-inset">INSET</span>`;
+  if (t.includes("start") || t.includes("end")) return `<span class="chip chip-term">Term</span>`;
+  return `<span class="chip chip-holiday">Holiday</span>`;
+}
+
+// ── STATE ────────────────────────────────────────────────────────────────────
+let busy = false;
+
+function setLoading(v) {
+  busy = v;
+  document.getElementById("loading").classList.toggle("show", v);
+  document.getElementById("search-btn").disabled = v;
+  document.querySelectorAll(".pill").forEach(p => p.disabled = v);
+}
+function showError(msg) {
+  document.getElementById("error-msg").textContent = msg;
+  document.getElementById("error-box").classList.add("show");
+  document.getElementById("results").classList.remove("show");
+}
+function clearError() {
+  document.getElementById("error-box").classList.remove("show");
+}
+
+// ── SEARCH ───────────────────────────────────────────────────────────────────
+async function doSearch() {
+  if (busy) return;
+  const school = document.getElementById("school-input").value.trim();
+  const year   = document.getElementById("year-select").value;
+  if (!school) { showError("Please enter a school name."); return; }
+
+  clearError();
+  document.getElementById("results").classList.remove("show");
+  setLoading(true);
+
+  const prompt = `You are a UK school holiday dates assistant.
+Return ONLY a valid JSON object. No markdown. No code fences. No explanation. Just raw JSON.
+
+School / Authority: ${school}
+Academic Year: ${year}
+
+Return exactly this shape:
+{
+  "schoolName": "Full school or authority name",
+  "localAuthority": "Local authority name",
+  "country": "England",
+  "disclaimer": "One sentence if dates are estimated",
+  "terms": [
+    {
+      "termName": "Autumn Term 1",
+      "events": [
+        {
+          "name": "Term starts",
+          "startDate": "4 September 2024",
+          "endDate": "4 September 2024",
+          "durationDays": 1,
+          "type": "term start"
+        }
+      ]
+    }
+  ]
+}
+
+Include ALL: term start/end dates, half terms, Christmas, Easter, summer holidays, bank holidays, INSET days.
+For Wokingham schools use Wokingham Borough Council typical term dates.
+type must be one of: school holiday, bank holiday, INSET day, term start, term end`;
+
+  try {
+    let res;
+    try {
+      res = await fetch("https://api.groq.com/openai/v1/chat/completions", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          "Authorization": `Bearer ${API_KEY}`
+        },
+        body: JSON.stringify({
+          model: "llama-3.3-70b-versatile",
+          max_tokens: 2000,
+          temperature: 0.1,
+          messages: [
+            { role: "system", content: "You are a UK school holiday dates assistant. Always respond with raw JSON only — no markdown, no code fences, no explanation." },
+            { role: "user", content: prompt }
+          ]
+        })
+      });
+    } catch (fetchErr) {
+      throw new Error("Network error — check your internet connection. (" + fetchErr.message + ")");
+    }
+
+    if (!res.ok) {
+      const txt = await res.text();
+      throw new Error(`API error ${res.status} — ${txt.slice(0, 200)}`);
+    }
+
+    const data = await res.json();
+    const raw = (data.choices?.[0]?.message?.content || "").trim();
+
+    if (!raw) throw new Error("Empty response from API.");
+
+    const s = raw.indexOf("{");
+    const e = raw.lastIndexOf("}");
+    if (s === -1 || e === -1) throw new Error("Response did not contain JSON. Got: " + raw.slice(0, 100));
+
+    const parsed = JSON.parse(raw.slice(s, e + 1));
+    if (!Array.isArray(parsed.terms)) throw new Error("Response missing terms array.");
+
+    render(parsed, year);
+
+  } catch (err) {
+    showError(err.message || "An unexpected error occurred.");
+  } finally {
+    setLoading(false);
+  }
+}
+
+// ── RENDER ───────────────────────────────────────────────────────────────────
+function render(data, year) {
+  const [y1, y2] = year.split("-");
+  const yearLabel = `${y1}–${y2.slice(-2)}`;
+
+  // Header
+  document.getElementById("school-header").innerHTML = `
+    <div>
+      <div class="school-name">${esc(data.schoolName)}</div>
+      <div class="school-meta">${esc([data.localAuthority, data.country].filter(Boolean).join(" · "))}</div>
+    </div>
+    <div class="year-badge">${esc(yearLabel)}</div>`;
+
+  // Terms
+  const container = document.getElementById("terms-container");
+  container.innerHTML = "";
+  (data.terms || []).forEach((term, i) => {
+    const color  = termColor(term.termName);
+    const events = term.events || [];
+    const div = document.createElement("div");
+    div.className = "card term-group";
+
+    const rows = events.map((ev, j) => {
+      const dateStr = ev.endDate && ev.endDate !== "null" && ev.endDate !== ev.startDate
+        ? `${esc(ev.startDate)} – ${esc(ev.endDate)}` : esc(ev.startDate || "");
+      const dur = ev.durationDays
+        ? `<span class="dur" style="background:${color}28;color:${color}">${ev.durationDays}d</span>` : "<span></span>";
+      return `<div class="event-row">
+        <div>
+          <div class="event-name">${esc(ev.name)}</div>
+          <div class="event-dates">${dateStr}</div>
+        </div>
+        ${dur}
+        ${typeChip(ev.type)}
+      </div>`;
+    }).join("");
+
+    div.innerHTML = `
+      <div class="term-header" onclick="toggleTerm(this)">
+        <span class="term-dot" style="background:${color}"></span>
+        <span class="term-name">${esc(term.termName)}</span>
+        <span class="term-count">${events.length} event${events.length !== 1 ? "s" : ""}</span>
+        <span class="term-chevron">▾</span>
+      </div>
+      <div class="term-body">${rows}</div>`;
+    container.appendChild(div);
+  });
+
+  // Disclaimer
+  const discText = data.disclaimer ? `${esc(data.disclaimer)} Always verify with your school or <a href="https://www.gov.uk/school-term-holiday-dates" target="_blank">GOV.UK</a>.`
+    : `Always verify dates with your school or <a href="https://www.gov.uk/school-term-holiday-dates" target="_blank">GOV.UK</a>.`;
+  document.getElementById("disclaimer-text").innerHTML = discText;
+
+  document.getElementById("results").classList.add("show");
+  document.getElementById("results").scrollIntoView({ behavior: "smooth", block: "start" });
+}
+
+function toggleTerm(header) {
+  header.closest(".term-group").classList.toggle("closed");
+}
+
+function esc(s) {
+  return String(s ?? "")
+    .replace(/&/g,"&amp;").replace(/</g,"&lt;")
+    .replace(/>/g,"&gt;").replace(/"/g,"&quot;");
+}
+</script>
+</body>
+</html>
