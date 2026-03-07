@@ -283,21 +283,9 @@ function clearError() {
 }
 
 // ── SEARCH ───────────────────────────────────────────────────────────────────
-async function doSearch() {
-  if (busy) return;
-  const school = document.getElementById("school-input").value.trim();
-  const year   = document.getElementById("year-select").value;
-  if (!school) { showError("Please enter a school name."); return; }
 
-  clearError();
-  document.getElementById("results").classList.remove("show");
-  setLoading(true);
-
-  const isWokingham = school.toLowerCase().includes("wokingham");
-  const isRivermead = school.toLowerCase().includes("rivermead");
-
-  // ── RIVERMEAD HARDCODED DATA (from official PDFs) ─────────────────────────
-  const rivermeadData = {
+// ── RIVERMEAD HARDCODED DATA (from official PDFs) ─────────────────────────
+const rivermeadData = {
     "2025-2026": {
       schoolName: "Rivermead Primary School",
       localAuthority: "Wokingham",
@@ -386,7 +374,20 @@ async function doSearch() {
         ]}
       ]
     }
-  };
+};
+
+async function doSearch() {
+  if (busy) return;
+  const school = document.getElementById("school-input").value.trim();
+  const year   = document.getElementById("year-select").value;
+  if (!school) { showError("Please enter a school name."); return; }
+
+  clearError();
+  document.getElementById("results").classList.remove("show");
+  setLoading(true);
+
+  const isWokingham = school.toLowerCase().includes("wokingham");
+  const isRivermead = school.toLowerCase().includes("rivermead");
 
   // If Rivermead and we have hardcoded data, use it directly — no API call needed
   if (isRivermead && rivermeadData[year]) {
