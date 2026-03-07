@@ -501,34 +501,12 @@ async function doSearch() {
     sourceNote = `\nIMPORTANT: Get the term dates from: https://www.wokingham.gov.uk/schools-and-education/school-information-and-services/school-term-dates-and-school-holidays`;
   }
 
-  const prompt = `Search the web to find the REAL, OFFICIAL term dates for the following school or local authority. Do not guess or estimate — look up the actual dates from their website or the local authority website.${sourceNote}
+  const prompt = `UK school term dates for: ${school}, academic year ${year}.${sourceNote}
 
-School / Authority: ${school}
-Academic Year: ${year}
+Respond with raw JSON only — no markdown. Use this shape:
+{"schoolName":"","localAuthority":"","country":"England","disclaimer":"source URL","terms":[{"termName":"","events":[{"name":"","startDate":"","endDate":"","durationDays":1,"type":""}]}]}
 
-Return exactly this JSON shape and nothing else:
-{
-  "schoolName": "Full school or authority name",
-  "localAuthority": "Local authority name",
-  "country": "England",
-  "disclaimer": "Source URL where dates were found, e.g. 'Dates sourced from rivermeadprimary.org.uk'",
-  "terms": [
-    {
-      "termName": "Autumn Term 1",
-      "events": [
-        {
-          "name": "Term starts",
-          "startDate": "4 September 2024",
-          "endDate": "4 September 2024",
-          "durationDays": 1,
-          "type": "term start"
-        }
-      ]
-    }
-  ]
-}
-
-Include ALL: term start/end dates, half terms, Christmas, Easter, summer holidays, bank holidays, INSET days.
+Include all: term start/end, half terms, Christmas, Easter, summer, bank holidays, INSET days.
 type must be one of: school holiday, bank holiday, INSET day, term start, term end`;
 
   try {
@@ -538,11 +516,10 @@ type must be one of: school holiday, bank holiday, INSET day, term start, term e
         method: "POST",
         headers: {
           "Content-Type": "application/json",
-          "Authorization": `Bearer ${API_KEY}`,
-          "Groq-Model-Version": "latest"
+          "Authorization": `Bearer ${API_KEY}`
         },
         body: JSON.stringify({
-          model: "groq/compound",
+          model: "llama-3.3-70b-versatile",
           max_tokens: 2000,
           temperature: 0.1,
           messages: [
