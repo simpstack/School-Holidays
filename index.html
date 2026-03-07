@@ -179,6 +179,10 @@ select option { background: var(--surface2); }
       <button class="btn" id="search-btn" onclick="doSearch()">Search</button>
     </div>
     <div class="pills" id="pills"></div>
+    <div style="display:flex; align-items:center; gap:8px; margin-top:8px;">
+      <span style="font-size:11px; color:var(--text3); white-space:nowrap;">Woodley</span>
+      <div class="pills" id="pills-woodley"></div>
+    </div>
   </div>
 
   <div class="card disclaimer" style="margin-bottom:14px; flex-wrap:wrap; gap:10px;">
@@ -232,6 +236,11 @@ const API_KEY = "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";
 // ── QUICK PILLS ──────────────────────────────────────────────────────────────
 const QUICK = ["Wokingham","Reading","Bracknell Forest","West Berkshire","Hampshire","Surrey","Oxfordshire","Kent"];
 document.getElementById("pills").innerHTML = QUICK.map(q =>
+  `<button class="pill" onclick="quickSearch('${q}')">${q}</button>`
+).join("");
+
+const WOODLEY = ["Rivermead Primary", "Waingels College"];
+document.getElementById("pills-woodley").innerHTML = WOODLEY.map(q =>
   `<button class="pill" onclick="quickSearch('${q}')">${q}</button>`
 ).join("");
 
@@ -376,6 +385,87 @@ const rivermeadData = {
     }
 };
 
+const wokinghamData = {
+  "2025-2026": {
+    schoolName: "Wokingham Borough Council Schools",
+    localAuthority: "Wokingham",
+    country: "England",
+    disclaimer: "Dates sourced from wokingham.gov.uk/schools-and-education/school-information-and-services/school-term-dates-and-school-holidays",
+    terms: [
+      { termName: "Autumn Term 1", events: [
+        { name: "Term starts", startDate: "3 September 2025", endDate: "3 September 2025", durationDays: 1, type: "term start" },
+        { name: "Term ends", startDate: "24 October 2025", endDate: "24 October 2025", durationDays: 1, type: "term end" },
+        { name: "Autumn Half Term", startDate: "27 October 2025", endDate: "31 October 2025", durationDays: 5, type: "school holiday" }
+      ]},
+      { termName: "Autumn Term 2", events: [
+        { name: "Term starts", startDate: "3 November 2025", endDate: "3 November 2025", durationDays: 1, type: "term start" },
+        { name: "Term ends", startDate: "19 December 2025", endDate: "19 December 2025", durationDays: 1, type: "term end" },
+        { name: "Christmas Holiday", startDate: "22 December 2025", endDate: "2 January 2026", durationDays: 12, type: "school holiday" }
+      ]},
+      { termName: "Spring Term 1", events: [
+        { name: "Term starts", startDate: "5 January 2026", endDate: "5 January 2026", durationDays: 1, type: "term start" },
+        { name: "Term ends", startDate: "13 February 2026", endDate: "13 February 2026", durationDays: 1, type: "term end" },
+        { name: "Spring Half Term", startDate: "16 February 2026", endDate: "20 February 2026", durationDays: 5, type: "school holiday" }
+      ]},
+      { termName: "Spring Term 2", events: [
+        { name: "Term starts", startDate: "23 February 2026", endDate: "23 February 2026", durationDays: 1, type: "term start" },
+        { name: "Term ends", startDate: "27 March 2026", endDate: "27 March 2026", durationDays: 1, type: "term end" },
+        { name: "Easter Holiday", startDate: "30 March 2026", endDate: "10 April 2026", durationDays: 12, type: "school holiday" }
+      ]},
+      { termName: "Summer Term 1", events: [
+        { name: "Term starts", startDate: "13 April 2026", endDate: "13 April 2026", durationDays: 1, type: "term start" },
+        { name: "Early May Bank Holiday", startDate: "4 May 2026", endDate: "4 May 2026", durationDays: 1, type: "bank holiday" },
+        { name: "Term ends", startDate: "22 May 2026", endDate: "22 May 2026", durationDays: 1, type: "term end" },
+        { name: "Summer Half Term", startDate: "25 May 2026", endDate: "29 May 2026", durationDays: 5, type: "school holiday" }
+      ]},
+      { termName: "Summer Term 2", events: [
+        { name: "Term starts", startDate: "1 June 2026", endDate: "1 June 2026", durationDays: 1, type: "term start" },
+        { name: "Term ends", startDate: "22 July 2026", endDate: "22 July 2026", durationDays: 1, type: "term end" },
+        { name: "Summer Holiday begins", startDate: "23 July 2026", endDate: "23 July 2026", durationDays: 1, type: "school holiday" }
+      ]}
+    ]
+  },
+  "2026-2027": {
+    schoolName: "Wokingham Borough Council Schools",
+    localAuthority: "Wokingham",
+    country: "England",
+    disclaimer: "Dates sourced from wokingham.gov.uk/schools-and-education/school-information-and-services/school-term-dates-and-school-holidays",
+    terms: [
+      { termName: "Autumn Term 1", events: [
+        { name: "Term starts", startDate: "1 September 2026", endDate: "1 September 2026", durationDays: 1, type: "term start" },
+        { name: "Term ends", startDate: "23 October 2026", endDate: "23 October 2026", durationDays: 1, type: "term end" },
+        { name: "Autumn Half Term", startDate: "26 October 2026", endDate: "30 October 2026", durationDays: 5, type: "school holiday" }
+      ]},
+      { termName: "Autumn Term 2", events: [
+        { name: "Term starts", startDate: "2 November 2026", endDate: "2 November 2026", durationDays: 1, type: "term start" },
+        { name: "Term ends", startDate: "18 December 2026", endDate: "18 December 2026", durationDays: 1, type: "term end" },
+        { name: "Christmas Holiday", startDate: "21 December 2026", endDate: "1 January 2027", durationDays: 12, type: "school holiday" }
+      ]},
+      { termName: "Spring Term 1", events: [
+        { name: "Term starts", startDate: "4 January 2027", endDate: "4 January 2027", durationDays: 1, type: "term start" },
+        { name: "Term ends", startDate: "12 February 2027", endDate: "12 February 2027", durationDays: 1, type: "term end" },
+        { name: "Spring Half Term", startDate: "15 February 2027", endDate: "19 February 2027", durationDays: 5, type: "school holiday" }
+      ]},
+      { termName: "Spring Term 2", events: [
+        { name: "Term starts", startDate: "22 February 2027", endDate: "22 February 2027", durationDays: 1, type: "term start" },
+        { name: "Term ends", startDate: "25 March 2027", endDate: "25 March 2027", durationDays: 1, type: "term end" },
+        { name: "Easter Holiday", startDate: "26 March 2027", endDate: "9 April 2027", durationDays: 15, type: "school holiday" }
+      ]},
+      { termName: "Summer Term 1", events: [
+        { name: "Term starts", startDate: "12 April 2027", endDate: "12 April 2027", durationDays: 1, type: "term start" },
+        { name: "Early May Bank Holiday", startDate: "3 May 2027", endDate: "3 May 2027", durationDays: 1, type: "bank holiday" },
+        { name: "Term ends", startDate: "21 May 2027", endDate: "21 May 2027", durationDays: 1, type: "term end" },
+        { name: "Summer Half Term", startDate: "31 May 2027", endDate: "4 June 2027", durationDays: 5, type: "school holiday" }
+      ]},
+      { termName: "Summer Term 2", events: [
+        { name: "Term starts", startDate: "7 June 2027", endDate: "7 June 2027", durationDays: 1, type: "term start" },
+        { name: "Term ends", startDate: "21 July 2027", endDate: "21 July 2027", durationDays: 1, type: "term end" },
+        { name: "Summer Holiday begins", startDate: "22 July 2027", endDate: "22 July 2027", durationDays: 1, type: "school holiday" }
+      ]}
+    ]
+  }
+};
+
 async function doSearch() {
   if (busy) return;
   const school = document.getElementById("school-input").value.trim();
@@ -389,6 +479,13 @@ async function doSearch() {
   const isWokingham = school.toLowerCase().includes("wokingham");
   const isRivermead = school.toLowerCase().includes("rivermead");
 
+  // If Wokingham and we have hardcoded data, use it directly — no API call needed
+  if (isWokingham && wokinghamData[year]) {
+    render(wokinghamData[year], year);
+    setLoading(false);
+    return;
+  }
+
   // If Rivermead and we have hardcoded data, use it directly — no API call needed
   if (isRivermead && rivermeadData[year]) {
     render(rivermeadData[year], year);
@@ -396,9 +493,12 @@ async function doSearch() {
     return;
   }
 
+  // For Rivermead/Wokingham future years, add a hint to the prompt
   let sourceNote = "";
-  if (isWokingham) {
-    sourceNote = `\nIMPORTANT: Get the term dates directly from this page: https://www.wokingham.gov.uk/schools-and-education/school-information-and-services/school-term-dates-and-school-holidays`;
+  if (isRivermead) {
+    sourceNote = `\nIMPORTANT: Get the term dates from: https://www.rivermeadprimary.org.uk/Parents/Term-dates/`;
+  } else if (isWokingham) {
+    sourceNote = `\nIMPORTANT: Get the term dates from: https://www.wokingham.gov.uk/schools-and-education/school-information-and-services/school-term-dates-and-school-holidays`;
   }
 
   const prompt = `Search the web to find the REAL, OFFICIAL term dates for the following school or local authority. Do not guess or estimate — look up the actual dates from their website or the local authority website.${sourceNote}
